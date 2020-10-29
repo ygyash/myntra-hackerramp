@@ -1,97 +1,125 @@
-.avatar{
-    height: 80%;
-}
-body{
-    width: 100%;
-}
-html{
-    overflow-x: hidden;
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
+
+.avatar {
+  height: 80%;
 }
 
-.cloth-item-btn{
-    margin: 1px;
-    padding: 2px 6px !important;
-    height: 27px;
+body {
+  font-family: "Roboto", sans-serif;
+  width: 100%;
 }
 
-.text-box{
-    display: flex;
-    flex-direction: column-reverse;
-    height: 100%;
-    border: 2px solid black ;
+#login {
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
 }
 
-.msgs{
-    display: flex;
-    flex-direction: column-reverse;
+#login-form {
+  background-color: white;
+  border-radius: 4%;
 }
 
-.message{
-    /* flex:1; */
-    margin-bottom:2px;
+#login-form label {
+  font-weight: bold;
 }
 
-#message-field{
-    
-    bottom: 2px;
-    left: 0;
-    flex:1;
-    width: 67%;
+html {
+  overflow-x: hidden;
 }
 
-#send-btn{
-    /* bottom: 2px;
+.cloth-item-btn {
+  margin: 1px;
+  padding: 2px 6px !important;
+  height: 27px;
+}
+
+.text-box {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  border: 2px solid black;
+}
+
+video {
+  width: 100px;
+  height: 100px;
+}
+
+.msgs {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+.message {
+  /* flex:1; */
+  margin-bottom: 2px;
+}
+
+#message-field {
+  bottom: 2px;
+  left: 0;
+  flex: 1;
+  width: 67%;
+}
+
+#send-btn {
+  /* bottom: 2px;
     right: 0;
     position: absolute; */
-    /* top: auto; */
-    width: 30%;
-    height: 32px;
-    padding: 0
+  /* top: auto; */
+  width: 30%;
+  height: 32px;
+  padding: 0;
 }
 
 .loading {
-    position: fixed;
-    z-index: 50;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background: #f1f1f1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  z-index: 50;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .loader {
-    -webkit-perspective: 120px;
-    -moz-perspective: 120px;
-    -ms-perspective: 120px;
-    perspective: 120px;
-    width: 100px;
-    height: 100px;
+  -webkit-perspective: 120px;
+  -moz-perspective: 120px;
+  -ms-perspective: 120px;
+  perspective: 120px;
+  width: 100px;
+  height: 100px;
 }
 
 .loader::before {
-    content: "";
-    position: absolute;
-    left: 25px;
-    top: 25px;
-    width: 50px;
-    height: 50px;
-    background-color: #9bffaf;
-    animation: flip 1s infinite;
+  content: "";
+  position: absolute;
+  left: 25px;
+  top: 25px;
+  width: 50px;
+  height: 50px;
+  background-color: #9bffaf;
+  animation: flip 1s infinite;
 }
 
 @keyframes flip {
-    0% {
-        transform: rotate(0);
-    }
-    
-    50% {
-        transform: rotateY(180deg);
-    }
-    
-    100% {
-        transform: rotateY(180deg) rotateX(180deg);
-    }
+  0% {
+    transform: rotate(0);
+  }
+
+  50% {
+    transform: rotateY(180deg);
+  }
+
+  100% {
+    transform: rotateY(180deg) rotateX(180deg);
+  }
 }
