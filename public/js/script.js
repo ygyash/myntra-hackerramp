@@ -43,14 +43,26 @@ $(document).ready(() => {
     var name = $("#name").val();
     room = $("#room").val();
 
-    console.log("Name is", name);
+    if ($('#radioBut1').is(':checked')) {
+      console.log("Name is", name);
 
-    if (name != "" && room != "") {
-      socket.emit("join", name, room);
-      $("#login").detach();
-      $("#dresser").show();
-      ready = true;
+      if (name != "" && room != "") {
+        socket.emit("join", name, room);
+        $("#login").detach();
+        $("#dresser").show();
+        ready = true;
+      }
     }
+    else {
+      if (name != "" && room != "") {
+        socket.emit("create", name, room,$('#selectModelForm option:selected').val());
+        $("#login").detach();
+        $("#dresser").show();
+        ready = true;
+      }
+    }
+
+    
   });
 
   $("#name").keypress(function (e) {
@@ -65,6 +77,16 @@ $(document).ready(() => {
       }
     }
   });
+
+  socket.on('room-not-found',function(){
+    alert('Sorry, room you are looking for not found!');
+    window.location.reload();
+  })
+
+  socket.on('room-already-exists',function(){
+    alert('Sorry, room you are creating already exists!');
+    window.location.reload();
+  })
 
   socket.on("update", function (msg) {
     if (ready) $("#msgs").append('<p class="message">' + msg + "</p>");
@@ -137,23 +159,26 @@ $(document).ready(() => {
     // console.log(this.id);
 
     var texture =
-      "stacytop" +
       $("#top-select option:selected").val() +
       "bottom" +
       $("#bottom-select option:selected").val() +
       "foot" +
       $("#foot-select option:selected").val();
-    socket.emit("change-clothes", "stacy", texture);
+    socket.emit("change-clothes", texture);
     console.log(texture);
   });
 
+
+
   socket.on("loadClothes", function (model, texture) {
+    console.log(model,texture);
     var prev = scene.getObjectByName("clothModel");
     scene.remove(prev);
 
     let stacy_txt = new THREE.TextureLoader().load(
       `model/${model}/tex/${texture}.jpg`
     );
+    console.log(`model/${model}/tex/${texture}.jpg`);
     stacy_txt.flipY = false;
 
     const stacy_mtl = new THREE.MeshPhongMaterial({
@@ -226,12 +251,12 @@ $(document).ready(() => {
   function init() {
     // const MODEL_PATH = "model/stacy/stacy.glb";
     const canvas = document.querySelector("#c");
-    const backgroundColor = 0xf1f1f1;
+    const backgroundColor = 0xc7c7d6;
 
     // Init the scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(backgroundColor);
-    scene.fog = new THREE.Fog(backgroundColor, 60, 100);
+    scene.fog = new THREE.Fog(backgroundColor, 80, 100);
 
     // Init the renderer
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true });

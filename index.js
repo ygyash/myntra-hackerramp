@@ -18,19 +18,51 @@ app.get("/", (req, res) => {
 
 io.on("connection", function (client) {
   console.log("Connection initiated...");
-
+  console.log(people);
+  console.log(roomToModel);
   client.on('create', function (name, room, model) {
+    if(roomToModel[room]){
+      client.emit('room-already-exists');
+      return;
+    }
+
+    console.log('New room creation initiated...')
     console.log(name + " has joined the server.");
     people[client.id] = {
       name: name,
       room: room,
     };
+
+    /////// Video Conference Part Start
+    var clientsInRoom = io.sockets.adapter.rooms[room];
+    var numClients = clientsInRoom
+      ? Object.keys(clientsInRoom.sockets).length
+      : 0;
+    console.log(numClients);
+
+    if (numClients === 0) {
+      client.emit("created", room, client.id);
+    } else {
+      io.sockets.in(room).emit("join", room);
+      client.emit(
+        "joined",
+        room,
+        client.id,
+        Object.keys(clientsInRoom.sockets)
+      );
+      io.sockets.in(room).emit("ready");
+    }
+    /////// End
+
+
     client.join(room);
     console.log(people[client.id].room);
     var currModel;
-    roomToModel[room] = model;
-    currModel = model;
-    client.emit("loadClothes", currModel, `${currModel}top1bottom1foot1.jpg`);
+    roomToModel[room] = {
+      model: model,
+      texture: `${model}top1bottom1foot1`
+    };
+    client.emit("loadClothes", model, `${model}top1bottom1foot1`);
     client.emit("update", "You have connected to the server.");
     var members = [people[client.id].name];
     // console.log(members);
@@ -38,6 +70,12 @@ io.on("connection", function (client) {
   });
 
   client.on("join", function (name, room) {
+
+    if(roomToModel[room]===undefined){
+      client.emit('room-not-found');
+      return;
+    }
+
     console.log(name + " has joined the server.");
     people[client.id] = {
       name: name,
@@ -67,7 +105,7 @@ io.on("connection", function (client) {
 
     client.join(room);
     console.log(people[client.id].room);
-    client.emit("loadClothes", roomToModel[room], `${roomToModel[room]}top1bottom1foot1.jpg`);
+    client.emit("loadClothes", roomToModel[room].model, roomToModel[room].texture);
     client.emit("update", "You have connected to the server.");
     client
       .to(people[client.id].room)
@@ -101,12 +139,18 @@ io.on("connection", function (client) {
       for (var x in people) {
         if (people[x].room === room) members.push(people[x].name);
       }
+      if(members.length===0){
+        delete roomToModel[room];
+      }
       io.sockets.emit("update-people", members);
     }
   });
 
   // Clothes Events
-  client.on("change-clothes", function (model, texture) {
+  client.on("change-clothes", function (texture) {
+    var model = roomToModel[people[client.id].room].model;
+    roomToModel[people[client.id].room].texture = model+texture;
+    console.log(roomToModel);
     console.log(`Clothes of ${model} changed with texture ${texture}`);
     io.to(people[client.id].room).emit("loadClothes", model, texture);
     io.to(people[client.id].room).emit(
