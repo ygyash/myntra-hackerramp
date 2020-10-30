@@ -32,7 +32,7 @@ html {
   overflow-x: hidden;
 }
 
-.clothes-list{
+.clothes-list {
   background: linear-gradient(to bottom, #000000 0%, #1d2847 100%);
 }
 
@@ -50,7 +50,7 @@ html {
   border: 2px solid black;
 }
 
-.video-row{
+.video-row {
   height: 20%;
   background-color: #1d2847;
 }
@@ -58,6 +58,15 @@ html {
 #videos {
   /* height: 100px; */
   width: 100%;
+}
+
+.remote-video-container {
+  color: white;
+  display: inline-block;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  margin-left: 5px;
 }
 
 #videos .video-container {
@@ -69,16 +78,10 @@ html {
 
 #videos .video-container button {
   border: none;
-  height: 20px;
-}
-
-#videos #localVideo {
-  height: 80px;
-  width: 100px;
 }
 
 #videos video {
-  height: 130px;
+  height: 80px;
   width: 100px;
 }
 

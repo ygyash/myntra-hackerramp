@@ -17,6 +17,7 @@ var clothes = {
   }
 }
 
+var name;
 
 // Video Call
 let mic_switch = true;
@@ -27,6 +28,7 @@ var isStarted = false;
 var localStream;
 var pc;
 var remoteStream;
+var remoteUserName;
 var usersAlreadyPresent;
 var userIndex = -1;
 var remoteUser;
@@ -37,7 +39,6 @@ var constraints = {
   video: {
     width: 320,
     height: 240,
-    frameRate: 5,
   },
 };
 
@@ -56,7 +57,7 @@ $(document).ready(() => {
 
   $("#join").click(function () {
     console.log("clicked");
-    var name = $("#name").val();
+    name = $("#name").val();
     room = $("#room").val();
 
     if ($('#radioBut1').is(':checked')) {
@@ -78,7 +79,7 @@ $(document).ready(() => {
       }
     }
 
-    
+
   });
 
   $("#name").keypress(function (e) {
@@ -172,7 +173,7 @@ $(document).ready(() => {
   init();
 
   $("#clothes-btn").on("click", function () {
-    
+
 
     // console.log(this.id);
 
@@ -197,7 +198,7 @@ $(document).ready(() => {
             list = list+`<option value=${i}>${clothes[model].top[i-1]}</option>`;
         }
         $('#top-select').html(list);
-        
+
         list = '';
         for(var i =1;i<=clothes[model].bottom.length;i++){
             list = list+`<option value=${i}>${clothes[model].bottom[i-1]}</option>`;
@@ -420,10 +421,6 @@ $(document).ready(() => {
   socket.on("joined", function (room, socketId, sockets) {
     console.log("joined: " + room);
     usersAlreadyPresent = sockets;
-    usersAlreadyPresent = usersAlreadyPresent.slice(
-      0,
-      usersAlreadyPresent.length - 1
-    );
     isChannelReady = true;
     setupEvents();
   });
@@ -445,6 +442,7 @@ $(document).ready(() => {
     }
     message.fromInitiator = isInitiator;
     message.from = currentUser;
+    message.fromUserName = name;
     message.to = remoteUser;
     console.log("Client sending message: ", message);
     socket.emit("message", message);
@@ -453,6 +451,9 @@ $(document).ready(() => {
   // This client receives a message
   socket.on("message", function (message) {
     remoteUser = message.from ? message.from : remoteUser;
+    remoteUserName = message.fromUserName
+      ? message.fromUserName
+      : remoteUserName;
     console.log(remoteUser);
     console.log("Client received message:", message);
     if (message.type === "init") {
@@ -571,16 +572,20 @@ $(document).ready(() => {
     }
   }
 
+  // This function should be called when call is complete.
   // Super Janky function, find a better way to do it.
   // This will be exponentially poor.
   function maybeEnd() {
     // Assuming this will be called after the last step.
+    // Timeout of 3s is set in order to avoid network errors.
     setTimeout(function () {
+      interactUser();
+
       if (isInitiator) {
         isInitiator = true;
         isStarted = false;
         isChannelReady = false;
-      } else if (userIndex + 1 === usersAlreadyPresent.length) {
+      } else if (userIndex === usersAlreadyPresent.length) {
         isInitiator = true;
         isStarted = false;
         isChannelReady = false;
@@ -588,7 +593,6 @@ $(document).ready(() => {
         isInitiator = false;
         isStarted = false;
         isChannelReady = true;
-        interactUser();
         sendMessage({ type: "init" });
       }
     }, 3000);
@@ -634,13 +638,22 @@ $(document).ready(() => {
     console.log("Remote stream added.");
     remoteStream = event.stream;
 
+    var remoteContainer = document.createElement("div");
+    remoteContainer.setAttribute("class", "remote-video-container");
+    remoteContainer.setAttribute("id", "user-" + remoteUser);
+
     var remoteVideo = document.createElement("video");
-    remoteVideo.setAttribute("id", "user-" + remoteUser);
     remoteVideo.autoplay = true;
     remoteVideo.playsinline = true;
     remoteVideo.srcObject = remoteStream;
 
-    document.getElementById("videos").appendChild(remoteVideo);
+    var remoteName = document.createElement("h5");
+    remoteName.textContent = remoteUserName;
+
+    remoteContainer.appendChild(remoteVideo);
+    remoteContainer.appendChild(remoteName);
+
+    document.getElementById("videos").appendChild(remoteContainer);
   }
 
   // TODO This function hasn't fired in testing yet, so the variables change might be buggy.
@@ -670,6 +683,7 @@ $(document).ready(() => {
     usersAlreadyPresent = undefined;
     userIndex = -1;
     remoteUser = undefined;
+    remoteUserName = undefined;
     currentUser = undefined;
 
     pc.close();
