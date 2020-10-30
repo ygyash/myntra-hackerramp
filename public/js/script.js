@@ -1,6 +1,22 @@
 // Common
 var socket = io.connect();
 var room = null;
+var gender;
+
+
+var clothes = {
+  'manuel':{
+    top: ['Grey Solid Tshirt','Roadster Striped Tshirt'],
+    bottom:['Blue Rugged Jeans', 'Blue Navy Shorts'],
+    foot:['White Sneakers','Red High Ankle Shoes']
+  },
+  'stacy':{
+    top:['Striped Sweater','Floral Shirt'],
+    bottom:['Black Jaggings','Blue Denim Jeans'],
+    foot:['Pink Running Shoes','Grey Boots']
+  }
+}
+
 
 // Video Call
 let mic_switch = true;
@@ -156,6 +172,8 @@ $(document).ready(() => {
   init();
 
   $("#clothes-btn").on("click", function () {
+    
+
     // console.log(this.id);
 
     var texture =
@@ -172,6 +190,31 @@ $(document).ready(() => {
 
   socket.on("loadClothes", function (model, texture) {
     console.log(model,texture);
+    console.log()
+    if($('#top-select').html().trim()===''){
+        var list = '';
+        for(var i =1;i<=clothes[model].top.length;i++){
+            list = list+`<option value=${i}>${clothes[model].top[i-1]}</option>`;
+        }
+        $('#top-select').html(list);
+        
+        list = '';
+        for(var i =1;i<=clothes[model].bottom.length;i++){
+            list = list+`<option value=${i}>${clothes[model].bottom[i-1]}</option>`;
+        }
+        $('#bottom-select').html(list);
+
+        list = '';
+        for(var i =1;i<=clothes[model].foot.length;i++){
+            list = list+`<option value=${i}>${clothes[model].foot[i-1]}</option>`;
+        }
+        $('#foot-select').html(list);
+
+    }
+
+
+
+
     var prev = scene.getObjectByName("clothModel");
     scene.remove(prev);
 
@@ -249,7 +292,6 @@ $(document).ready(() => {
   });
 
   function init() {
-    // const MODEL_PATH = "model/stacy/stacy.glb";
     const canvas = document.querySelector("#c");
     const backgroundColor = 0xc7c7d6;
 
