@@ -23,6 +23,28 @@ io.on("connection", function (client) {
       name: name,
       room: room,
     };
+
+    /////// Video Conference Part Start
+    var clientsInRoom = io.sockets.adapter.rooms[room];
+    var numClients = clientsInRoom
+      ? Object.keys(clientsInRoom.sockets).length
+      : 0;
+    console.log(numClients);
+
+    if (numClients === 0) {
+      client.emit("created", room, client.id);
+    } else {
+      io.sockets.in(room).emit("join", room);
+      client.emit(
+        "joined",
+        room,
+        client.id,
+        Object.keys(clientsInRoom.sockets)
+      );
+      io.sockets.in(room).emit("ready");
+    }
+    /////// End
+
     client.join(room);
     console.log(people[client.id].room);
     client.emit("update", "You have connected to the server.");
@@ -89,29 +111,6 @@ io.on("connection", function (client) {
     rooms.forEach(function (room) {
       client.to(room).emit("disconnected", client.id);
     });
-  });
-
-  client.on("create or join", function (room) {
-    var clientsInRoom = io.sockets.adapter.rooms[room];
-    var numClients = clientsInRoom
-      ? Object.keys(clientsInRoom.sockets).length
-      : 0;
-    console.log(numClients);
-
-    if (numClients === 0) {
-      client.join(room);
-      client.emit("created", room, client.id);
-    } else {
-      io.sockets.in(room).emit("join", room);
-      client.join(room);
-      client.emit(
-        "joined",
-        room,
-        client.id,
-        Object.keys(clientsInRoom.sockets)
-      );
-      io.sockets.in(room).emit("ready");
-    }
   });
 
   client.on("ipaddr", function () {

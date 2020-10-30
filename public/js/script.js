@@ -1,6 +1,6 @@
 // Common
 var socket = io.connect();
-var room;
+var room = null;
 
 // Video Call
 let mic_switch = true;
@@ -401,10 +401,10 @@ $(document).ready(() => {
     return needResize;
   }
 
+  // Video Conferencing code.
   localVideo = document.querySelector("#localVideo");
   socket.on("connect", function () {
     currentUser = socket.id;
-    notifyRemoteOfJoining();
   });
 
   socket.on("created", function (room) {
@@ -437,10 +437,12 @@ $(document).ready(() => {
     }
   });
 
-  ////////////////////////////////////////////////
-
   function sendMessage(message) {
-    if (isInitiator === false && usersAlreadyPresent) {
+    if (
+      isInitiator === false &&
+      usersAlreadyPresent &&
+      usersAlreadyPresent.length > 0
+    ) {
       message.sendToRemoteUser = true;
     }
     message.fromInitiator = isInitiator;
@@ -484,16 +486,7 @@ $(document).ready(() => {
     }
   });
 
-  ////////////////////////////////////////////////////
-
   // Wait for socket to get it's id.
-  function notifyRemoteOfJoining() {
-    if (room !== "") {
-      socket.emit("create or join", room);
-      console.log("Attempted to create or join room", room);
-    }
-  }
-
   function setupEvents() {
     navigator.mediaDevices.getUserMedia(constraints).then(gotStream);
   }
@@ -540,8 +533,6 @@ $(document).ready(() => {
     sendMessage("bye");
   };
 
-  /////////////////////////////////////////////////////////
-
   function createPeerConnection() {
     try {
       pc = new RTCPeerConnection({
@@ -582,7 +573,7 @@ $(document).ready(() => {
     }
   }
 
-  // Super Buggy Function, find a better way to do it.
+  // Super Janky function, find a better way to do it.
   // This will be exponentially poor.
   function maybeEnd() {
     // Assuming this will be called after the last step.
