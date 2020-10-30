@@ -32,7 +32,7 @@ html {
   overflow-x: hidden;
 }
 
-.clothes-list{
+.clothes-list {
   background: linear-gradient(to bottom, #000000 0%, #1d2847 100%);
 }
 
@@ -50,7 +50,7 @@ html {
   border: 2px solid black;
 }
 
-.video-row{
+.video-row {
   height: 20%;
   background-color: #1d2847;
 }
@@ -61,6 +61,7 @@ html {
 }
 
 .remote-video-container {
+  color: white;
   display: inline-block;
   text-align: center;
   width: 100px;
