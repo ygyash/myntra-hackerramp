@@ -91,26 +91,65 @@
       <div class="row">
         <div class="col-md-1"></div>
         <div style="margin-top: 20px;"  class="col-md-10">
-          <form>
+          <form id="clothes-form">
             <div class="form-group">
               <label style="color: aliceblue;" for="top-select">Top</label>
-              <select class="form-control" id="top-select">
+              <select class="form-control" id="top-select" name="top">
               </select>
             </div>
             <div class="form-group">
               <label style="color: aliceblue;" for="bottom-select">Bottom</label>
-              <select class="form-control" id="bottom-select">
+              <select class="form-control" id="bottom-select" name="bottom">
               </select>
             </div>
             <div class="form-group">
               <label style="color: aliceblue;" for="foot-select">Footwear</label>
-              <select class="form-control" id="foot-select">
+              <select class="form-control" id="foot-select" name="foot">
               </select>
             </div>
             <div class="form-group">
               <button id="clothes-btn" class="btn btn-primary">Change</button>
+              <button id="clothes-btn" class="btn btn-danger" type="submit">Submit</button>
             </div>
           </form>
+          <script>
+              document.querySelector('#clothes-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                let x = document.querySelector('#clothes-form').elements;
+                let top_index = x['top'].value;
+                let bottom_index = x['bottom'].value;
+                let foot_index = x['foot'].value;
+                let outfit = [];
+                outfit.push(x['top'][top_index-1].innerText.replaceAll(' ', '_').toLowerCase());
+                outfit.push(x['bottom'][bottom_index-1].innerText.replaceAll(' ', '_').toLowerCase());
+                outfit.push(x['foot'][foot_index-1].innerText.replaceAll(' ', '_').toLowerCase());
+                console.log(outfit);
+                let renderSearch = [];
+                async function getReq(item) {
+                  await fetch(`http://localhost:5001/textures/${item}`,
+                  {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                      'Content-Type': 'application/json'
+                      // 'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                  })
+                  .then(function (response) {
+                    response.json().then(function(data) {
+                      // console.log(data);
+                      renderSearch.push(data.Texture);
+                    });
+                  })
+                  .catch(function (error) {
+                    console.log("Error: " + error);
+                  });
+                }
+                outfit.forEach(getReq);
+                console.log(renderSearch);
+              });
+          </script>
+          
           <div class="col-md-1"></div>
         </div>
       </div>

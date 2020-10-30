@@ -39,6 +39,7 @@ router.get("/", (req, res, next) => {
         count: docs.length,
         Textures: docs.map(doc => {
           return {
+            id: doc.id,
             name: doc.name,
             description: doc.description,
             link: doc.link,
@@ -68,8 +69,9 @@ router.get("/", (req, res, next) => {
 });
 
 router.post("/", upload.single('textureImage'), (req, res, next) => {
-  const { name, link, description } = req.body;
+  const { id, name, link, description } = req.body;
   let texture = {};
+  texture.id = id
   texture.name = name;
   texture.description = description;
   texture.link = link;
@@ -82,6 +84,7 @@ router.post("/", upload.single('textureImage'), (req, res, next) => {
         res.status(201).json({
           message: "Created product successfully",
           createdProduct: {
+              id: result.id,
               name: result.name,
               link: result.link,
               description: result.description,
@@ -104,8 +107,8 @@ router.post("/", upload.single('textureImage'), (req, res, next) => {
 
 router.get("/:textureId", (req, res, next) => {
   const id = req.params.textureId;
-  Texture.findById(id)
-    .select('name description link _id textureImage')
+  Texture.find({ id: id })
+    .select('id name description link _id textureImage')
     .exec()
     .then(doc => {
       console.log("From database", doc);
