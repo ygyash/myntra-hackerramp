@@ -147,12 +147,12 @@ $(document).ready(() => {
     console.log(texture);
   });
 
-  socket.on("clothes", function (model, texture) {
+  socket.on("loadClothes", function (model, texture) {
     var prev = scene.getObjectByName("clothModel");
     scene.remove(prev);
 
     let stacy_txt = new THREE.TextureLoader().load(
-      "model/stacy/tex/" + texture + ".jpg"
+      `model/${model}/tex/${texture}.jpg`
     );
     stacy_txt.flipY = false;
 
@@ -225,7 +225,7 @@ $(document).ready(() => {
   });
 
   function init() {
-    const MODEL_PATH = "model/stacy/stacy.glb";
+    // const MODEL_PATH = "model/stacy/stacy.glb";
     const canvas = document.querySelector("#c");
     const backgroundColor = 0xf1f1f1;
 
@@ -252,76 +252,6 @@ $(document).ready(() => {
     camera.position.z = 30;
     camera.position.x = 0;
     camera.position.y = -3;
-
-    let stacy_txt = new THREE.TextureLoader().load(
-      "model/stacy/tex/stacytop1bottom1foot1.jpg"
-    );
-    stacy_txt.flipY = false;
-
-    const stacy_mtl = new THREE.MeshPhongMaterial({
-      map: stacy_txt,
-      color: 0xffffff,
-      skinning: true,
-    });
-
-    var loader = new THREE.GLTFLoader();
-
-    loader.load(
-      MODEL_PATH,
-      function (gltf) {
-        model = gltf.scene;
-        let fileAnimations = gltf.animations;
-
-        model.traverse((o) => {
-          // console.log(o);
-          if (o.isMesh) {
-            o.castShadow = true;
-            o.receiveShadow = true;
-            o.material = stacy_mtl;
-          }
-          // Reference the neck and waist bones
-          if (o.isBone && o.name === "mixamorigNeck") {
-            neck = o;
-          }
-          if (o.isBone && o.name === "mixamorigSpine") {
-            waist = o;
-          }
-        });
-
-        model.scale.set(10, 10, 10);
-        model.position.y = -11;
-        model.name = "clothModel";
-
-        scene.add(model);
-
-        loaderAnim.remove();
-
-        mixer = new THREE.AnimationMixer(model);
-
-        let clips = fileAnimations.filter((val) => val.name !== "idle");
-        possibleAnims = clips.map((val) => {
-          let clip = THREE.AnimationClip.findByName(clips, val.name);
-
-          clip.tracks.splice(3, 3);
-          clip.tracks.splice(9, 3);
-
-          clip = mixer.clipAction(clip);
-          return clip;
-        });
-
-        let idleAnim = THREE.AnimationClip.findByName(fileAnimations, "idle");
-
-        idleAnim.tracks.splice(3, 3);
-        idleAnim.tracks.splice(9, 3);
-
-        idle = mixer.clipAction(idleAnim);
-        idle.play();
-      },
-      undefined, // We don't need this function
-      function (error) {
-        console.error(error);
-      }
-    );
 
     // Add lights
     let hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 0.61);

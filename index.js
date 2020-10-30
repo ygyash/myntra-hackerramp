@@ -10,6 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 var people = {};
+var roomToModel = {};
 
 app.get("/", (req, res) => {
   return res.sendFile(__dirname + "/public/index.html");
@@ -17,6 +18,25 @@ app.get("/", (req, res) => {
 
 io.on("connection", function (client) {
   console.log("Connection initiated...");
+
+  client.on('create', function (name, room, model) {
+    console.log(name + " has joined the server.");
+    people[client.id] = {
+      name: name,
+      room: room,
+    };
+    client.join(room);
+    console.log(people[client.id].room);
+    var currModel;
+    roomToModel[room] = model;
+    currModel = model;
+    client.emit("loadClothes", currModel, `${currModel}top1bottom1foot1.jpg`);
+    client.emit("update", "You have connected to the server.");
+    var members = [people[client.id].name];
+    // console.log(members);
+    io.to(people[client.id].room).emit("update-people", members);
+  });
+
   client.on("join", function (name, room) {
     console.log(name + " has joined the server.");
     people[client.id] = {
@@ -47,6 +67,7 @@ io.on("connection", function (client) {
 
     client.join(room);
     console.log(people[client.id].room);
+    client.emit("loadClothes", roomToModel[room], `${roomToModel[room]}top1bottom1foot1.jpg`);
     client.emit("update", "You have connected to the server.");
     client
       .to(people[client.id].room)
@@ -87,7 +108,7 @@ io.on("connection", function (client) {
   // Clothes Events
   client.on("change-clothes", function (model, texture) {
     console.log(`Clothes of ${model} changed with texture ${texture}`);
-    io.to(people[client.id].room).emit("clothes", model, texture);
+    io.to(people[client.id].room).emit("loadClothes", model, texture);
     io.to(people[client.id].room).emit(
       "update",
       people[client.id].name + " has made some changes! Check it out. "
