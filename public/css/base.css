@@ -45,9 +45,31 @@ html {
   border: 2px solid black;
 }
 
-video {
+#videos {
+  height: 100px;
+  width: 100%;
+}
+
+#videos .video-container {
+  display: inline-block;
   width: 100px;
   height: 100px;
+  text-align: center;
+}
+
+#videos .video-container button {
+  border: none;
+  height: 20px;
+}
+
+#videos #localVideo {
+  height: 80px;
+  width: 100px;
+}
+
+#videos video {
+  height: 130px;
+  width: 100px;
 }
 
 .msgs {

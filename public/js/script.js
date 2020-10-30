@@ -686,20 +686,36 @@ $(document).ready(() => {
     pc.close();
     pc = null;
   }
-
-  function toggleVideo() {
-    if (localStream != null && localStream.getVideoTracks().length > 0) {
-      video_switch = !video_switch;
-
-      localStream.getVideoTracks()[0].enabled = video_switch;
-    }
-  }
-
-  function toggleMic() {
-    if (localStream != null && localStream.getAudioTracks().length > 0) {
-      mic_switch = !mic_switch;
-
-      localStream.getAudioTracks()[0].enabled = mic_switch;
-    }
-  }
 })();
+
+function toggleVideo() {
+  if (localStream != null && localStream.getVideoTracks().length > 0) {
+    video_switch = !video_switch;
+
+    localStream.getVideoTracks()[0].enabled = video_switch;
+
+    if ($("#videoOn").css("display") == "none") {
+      $("#videoOn").css({ display: "block" });
+      $("#videoOff").css({ display: "none" });
+    } else {
+      $("#videoOn").css({ display: "none" });
+      $("#videoOff").css({ display: "block" });
+    }
+  }
+}
+
+function toggleMic() {
+  if (localStream != null && localStream.getAudioTracks().length > 0) {
+    mic_switch = !mic_switch;
+
+    localStream.getAudioTracks()[0].enabled = mic_switch;
+  }
+
+  if ($("#micOn").css("display") == "none") {
+    $("#micOn").css({ display: "block" });
+    $("#micOff").css({ display: "none" });
+  } else {
+    $("#micOn").css({ display: "none" });
+    $("#micOff").css({ display: "block" });
+  }
+}

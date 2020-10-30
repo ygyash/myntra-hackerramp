@@ -1,9 +1,7 @@
-$(document).ready(function () {
-  $("#radioBut2").click(function () {
-    $("#selectModelFormDiv").css({ display: "block" });
-  });
+$("#radioBut2").on("click", function () {
+  $("#selectModelFormDiv").css({ display: "block" });
+});
 
-  $("#radioBut1").click(function () {
-    $("#selectModelFormDiv").css({ display: "none" });
-  });
+$("#radioBut1").on("click", function () {
+  $("#selectModelFormDiv").css({ display: "none" });
 });
