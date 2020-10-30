@@ -60,6 +60,14 @@ html {
   width: 100%;
 }
 
+.remote-video-container {
+  display: inline-block;
+  text-align: center;
+  width: 100px;
+  height: 100px;
+  margin-left: 5px;
+}
+
 #videos .video-container {
   display: inline-block;
   width: 100px;
@@ -69,16 +77,10 @@ html {
 
 #videos .video-container button {
   border: none;
-  height: 20px;
-}
-
-#videos #localVideo {
-  height: 80px;
-  width: 100px;
 }
 
 #videos video {
-  height: 130px;
+  height: 80px;
   width: 100px;
 }
 
