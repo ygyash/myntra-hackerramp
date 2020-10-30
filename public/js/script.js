@@ -194,7 +194,6 @@ $(document).ready(() => {
 
         scene.add(model);
 
-        loaderAnim.remove();
 
         mixer = new THREE.AnimationMixer(model);
 
@@ -294,6 +293,8 @@ $(document).ready(() => {
     sphere.position.y = -2.5;
     sphere.position.x = -0.25;
     scene.add(sphere);
+
+    loaderAnim.remove();
   }
 
   function update() {
