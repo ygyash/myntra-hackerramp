@@ -70,19 +70,51 @@
           id="login-form"
         >
           <div class="form-group">
-            <label for="name">User Name</label>
-            <input type="text" class="form-control" id="name" />
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="exampleRadios"
+                id="radioBut1"
+                value="option1"
+                checked
+              />
+              <label class="form-check-label" for="radioBut1"> Join </label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                name="exampleRadios"
+                id="radioBut2"
+                value="option2"
+              />
+              <label class="form-check-label" for="radioBut2"> Create </label>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="room">Room Name</label>
-            <input type="text" class="form-control" id="room" />
+          <div id="formContents">
+            <div class="form-group">
+              <label for="name">User Name</label>
+              <input type="text" class="form-control" id="name" />
+            </div>
+            <div class="form-group">
+              <label for="room">Room Name</label>
+              <input type="text" class="form-control" id="room" />
+            </div>
+            <div class="form-group" id="selectModelFormDiv" style="display: none">
+              <label for="selectModelForm">Select Model</label>
+              <select class="form-control" id="selectModelForm">
+                <option>Male</option>
+                <option>Female</option>
+              </select>
+            </div>
           </div>
           <div class="form-group" style="text-align: center">
             <input
               type="button"
               name="join"
               id="join"
-              value="Join / Create"
+              value="Go!"
               class="btn btn-primary"
             />
           </div>
@@ -172,6 +204,7 @@
     <!-- This brings in the ability to load custom 3D objects in the .gltf file format. Blender allows the ability to export to this format out the box -->
     <script src="https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
     <!-- partial -->
+    <script src="js/join.js"></script>
     <script src="js/script.js"></script>
   </body>
 </html>
