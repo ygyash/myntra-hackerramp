@@ -154,7 +154,7 @@ io.on("connection", function (client) {
     roomToModel[people[client.id].room].texture = model + texture;
     console.log(roomToModel);
     console.log(`Clothes of ${model} changed with texture ${texture}`);
-    io.to(people[client.id].room).emit("loadClothes", model, texture);
+    io.to(people[client.id].room).emit("loadClothes", model, model + texture);
     io.to(people[client.id].room).emit(
       "update",
       people[client.id].name + " has made some changes! Check it out. "

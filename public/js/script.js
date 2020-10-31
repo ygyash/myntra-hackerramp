@@ -5,15 +5,15 @@ var gender;
 
 
 var clothes = {
-  'manuel':{
-    top: ['Grey Solid Tshirt','Roadster Striped Tshirt'],
-    bottom:['Blue Rugged Jeans', 'Blue Navy Shorts'],
-    foot:['White Sneakers','Red High Ankle Shoes']
+  'manuel': {
+    top: ['Grey Solid Tshirt', 'Roadster Striped Tshirt'],
+    bottom: ['Blue Rugged Jeans', 'Blue Navy Shorts'],
+    foot: ['White Sneakers', 'Red High Ankle Shoes']
   },
-  'stacy':{
-    top:['Striped Sweater','Floral Shirt'],
-    bottom:['Black Jaggings','Blue Denim Jeans'],
-    foot:['Pink Running Shoes','Grey Boots']
+  'stacy': {
+    top: ['Striped Sweater', 'Floral Shirt'],
+    bottom: ['Black Jaggings', 'Blue Denim Jeans'],
+    foot: ['Pink Running Shoes', 'Grey Boots']
   }
 }
 
@@ -72,7 +72,7 @@ $(document).ready(() => {
     }
     else {
       if (name != "" && room != "") {
-        socket.emit("create", name, room,$('#selectModelForm option:selected').val());
+        socket.emit("create", name, room, $('#selectModelForm option:selected').val());
         $("#login").detach();
         $("#dresser").show();
         ready = true;
@@ -95,12 +95,12 @@ $(document).ready(() => {
     }
   });
 
-  socket.on('room-not-found',function(){
+  socket.on('room-not-found', function () {
     alert('Sorry, room you are looking for not found!');
     window.location.reload();
   })
 
-  socket.on('room-already-exists',function(){
+  socket.on('room-already-exists', function () {
     alert('Sorry, room you are creating already exists!');
     window.location.reload();
   })
@@ -177,7 +177,7 @@ $(document).ready(() => {
 
     // console.log(this.id);
 
-    var texture =
+    var texture = 'top' +
       $("#top-select option:selected").val() +
       "bottom" +
       $("#bottom-select option:selected").val() +
@@ -190,7 +190,7 @@ $(document).ready(() => {
 
 
   socket.on("loadClothes", function (model, texture) {
-    console.log(model,texture);
+    console.log(model, texture);
     console.log()
     if($('#top-select').html().trim()===''){
         var list = '';
