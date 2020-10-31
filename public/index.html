@@ -90,7 +90,7 @@
     <div class="clothes-list col-md-3">
       <div class="row">
         <div class="col-md-1"></div>
-        <div style="margin-top: 20px;"  class="col-md-10">
+        <div style="margin-top: 20px;" class="col-md-10">
           <form id="clothes-form">
             <div class="form-group">
               <label style="color: aliceblue;" for="top-select">Top</label>
@@ -109,119 +109,11 @@
             </div>
             <div class="form-group">
               <button id="clothes-btn" class="btn btn-primary">Change</button>
-              <button id="clothes-btn" class="btn btn-danger" type="submit">Submit</button>
+              <button id="submit-btn" class="btn btn-danger">Submit</button>
             </div>
           </form>
-          <script>
-              document.querySelector('#clothes-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                let x = document.querySelector('#clothes-form').elements;
-                let top_index = x['top'].value;
-                let bottom_index = x['bottom'].value;
-                let foot_index = x['foot'].value;
-                let outfit = [];
-                outfit.push(x['top'][top_index-1].innerText.replaceAll(' ', '_').toLowerCase());
-                outfit.push(x['bottom'][bottom_index-1].innerText.replaceAll(' ', '_').toLowerCase());
-                outfit.push(x['foot'][foot_index-1].innerText.replaceAll(' ', '_').toLowerCase());
-                console.log(outfit);
-                let renderSearch = [];
-                async function getReq(item) {
-                  try {
-                    const response_raw = await fetch(
-                      `http://localhost:5001/textures/${item}`,
-                      {
-                        method: "GET",
-                        mode: "cors",
-                        headers: {
-                          "Content-Type": "application/json",
-                          // 'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                      }
-                    );
-                    const response = await response_raw.json();
-                      console.log(response);
-                      renderSearch.push(response.Texture);
-                      return new Promise((resolve, reject) => {
-                        resolve();
-                      });
-                    } catch (err) {
-                      console.error(err);
-                    }
-                  }
-                  const renderHTML = async () => {
-                    await $("body").html(`
-                                  <div class="jumbotron text-center">
-                                    <h1>Search Results</h1>
-                                    <h3>Based on your model, these are the best fits for your outfit.</h3> 
-                                  </div>
-                                    
-                                  <div class="container">
-                                    <div class="row">
-                                      <div class="col-sm-3">
-                                        <h3>Top</h3>
-                                        <h5>${renderSearch[0][0].name}</h5>
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <h3>Description</h3>
-                                        <h5>${renderSearch[0][0].description}</h5>
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <h3>Link</h3>        
-                                        <h5>${renderSearch[0][0].link}</h5>
-                                      </div>
-                                      <div class="col-sm-3">      
-                                          <Img src="http://localhost:5001/${renderSearch[0][0].textureImage}" width="300" height="300" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-sm-3">
-                                        <h3>Bottom</h3>
-                                        <h5>${renderSearch[1][0].name}</h5>
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <h3>Description</h3>
-                                        <h5>${renderSearch[1][0].description}</h5>
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <h3>Link</h3>        
-                                        <h5>${renderSearch[1][0].link}</h5>
-                                      </div>
-                                      <div class="col-sm-3">    
-                                          <Img src="http://localhost:5001/${renderSearch[1][0].textureImage}" width="300" height="300" />
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                      <div class="col-sm-3">
-                                        <h3>Foot Wear</h3>
-                                        <h5>${renderSearch[2][0].name}</h5>
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <h3>Description</h3>
-                                        <h5>${renderSearch[2][0].description}</h5>
-                                      </div>
-                                      <div class="col-sm-3">
-                                        <h3>Link</h3>        
-                                        <h5>${renderSearch[2][0].link}</h5>
-                                      </div>
-                                      <div class="col-sm-3">   
-                                          <Img src="http://localhost:5001/${renderSearch[2][0].textureImage}" width="300" height="300" />
-                                        </div>
-                                    </div>
-                                  </div>
 
-                                  `);  
-                  }
-                  const startRequest = async () => {
-                    for (let i = 0; i < outfit.length; i++) {
-                      await getReq(outfit[i]);
-                    }
-                    console.log(renderSearch);
-                    await renderHTML();
-                  };
-                  startRequest();
-              });
-          </script>
-          
+
           <div class="col-md-1"></div>
         </div>
       </div>
@@ -280,6 +172,117 @@
   <!-- This brings in the ability to load custom 3D objects in the .gltf file format. Blender allows the ability to export to this format out the box -->
   <script src="https://cdn.jsdelivr.net/gh/mrdoob/Three.js@r92/examples/js/loaders/GLTFLoader.js"></script>
   <!-- partial -->
+
+  <script>
+    $('#submit-btn').on('click', function (e) {
+      e.preventDefault();
+      let x = document.querySelector('#clothes-form').elements;
+      let top_index = x['top'].value;
+      let bottom_index = x['bottom'].value;
+      let foot_index = x['foot'].value;
+      let outfit = [];
+      outfit.push(x['top'][top_index - 1].innerText.replaceAll(' ', '_').toLowerCase());
+      outfit.push(x['bottom'][bottom_index - 1].innerText.replaceAll(' ', '_').toLowerCase());
+      outfit.push(x['foot'][foot_index - 1].innerText.replaceAll(' ', '_').toLowerCase());
+      console.log(outfit);
+      let renderSearch = [];
+      async function getReq(item) {
+        try {
+          const response_raw = await fetch(
+            `http://localhost:5001/textures/${item}`,
+            {
+              method: "GET",
+              mode: "cors",
+              headers: {
+                "Content-Type": "application/json",
+                // 'Content-Type': 'application/x-www-form-urlencoded',
+              },
+            }
+          );
+          const response = await response_raw.json();
+          console.log(response);
+          renderSearch.push(response.Texture);
+          return new Promise((resolve, reject) => {
+            resolve();
+          });
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      const renderHTML = async () => {
+        await $("body").html(`
+                        <div class="jumbotron text-center">
+                          <h1>Search Results</h1>
+                          <h3>Based on your model, these are the best fits for your outfit.</h3> 
+                        </div>
+                          
+                        <div class="container">
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h3>Top</h3>
+                              <h5>${renderSearch[0][0].name}</h5>
+                            </div>
+                            <div class="col-sm-3">
+                              <h3>Description</h3>
+                              <h5>${renderSearch[0][0].description}</h5>
+                            </div>
+                            <div class="col-sm-3">
+                              <h3>Link</h3>        
+                              <h5>${renderSearch[0][0].link}</h5>
+                            </div>
+                            <div class="col-sm-3">      
+                                <Img src="http://localhost:5001/${renderSearch[0][0].textureImage}" width="300" height="300" />
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h3>Bottom</h3>
+                              <h5>${renderSearch[1][0].name}</h5>
+                            </div>
+                            <div class="col-sm-3">
+                              <h3>Description</h3>
+                              <h5>${renderSearch[1][0].description}</h5>
+                            </div>
+                            <div class="col-sm-3">
+                              <h3>Link</h3>        
+                              <h5>${renderSearch[1][0].link}</h5>
+                            </div>
+                            <div class="col-sm-3">    
+                                <Img src="http://localhost:5001/${renderSearch[1][0].textureImage}" width="300" height="300" />
+                              </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-sm-3">
+                              <h3>Foot Wear</h3>
+                              <h5>${renderSearch[2][0].name}</h5>
+                            </div>
+                            <div class="col-sm-3">
+                              <h3>Description</h3>
+                              <h5>${renderSearch[2][0].description}</h5>
+                            </div>
+                            <div class="col-sm-3">
+                              <h3>Link</h3>        
+                              <h5>${renderSearch[2][0].link}</h5>
+                            </div>
+                            <div class="col-sm-3">   
+                                <Img src="http://localhost:5001/${renderSearch[2][0].textureImage}" width="300" height="300" />
+                              </div>
+                          </div>
+                        </div>
+
+                        `);
+      }
+      const startRequest = async () => {
+        for (let i = 0; i < outfit.length; i++) {
+          await getReq(outfit[i]);
+        }
+        console.log(renderSearch);
+        await renderHTML();
+      };
+      startRequest();
+    });
+  </script>
+
   <script src="js/join.js"></script>
   <script src="js/script.js"></script>
 </body>
