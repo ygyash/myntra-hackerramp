@@ -126,27 +126,99 @@
                 console.log(outfit);
                 let renderSearch = [];
                 async function getReq(item) {
-                  await fetch(`http://localhost:5001/textures/${item}`,
-                  {
-                    method: 'GET',
-                    mode: 'cors',
-                    headers: {
-                      'Content-Type': 'application/json'
-                      // 'Content-Type': 'application/x-www-form-urlencoded',
+                  try {
+                    const response_raw = await fetch(
+                      `http://localhost:5001/textures/${item}`,
+                      {
+                        method: "GET",
+                        mode: "cors",
+                        headers: {
+                          "Content-Type": "application/json",
+                          // 'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                      }
+                    );
+                    const response = await response_raw.json();
+                      console.log(response);
+                      renderSearch.push(response.Texture);
+                      return new Promise((resolve, reject) => {
+                        resolve();
+                      });
+                    } catch (err) {
+                      console.error(err);
                     }
-                  })
-                  .then(function (response) {
-                    response.json().then(function(data) {
-                      // console.log(data);
-                      renderSearch.push(data.Texture);
-                    });
-                  })
-                  .catch(function (error) {
-                    console.log("Error: " + error);
-                  });
-                }
-                outfit.forEach(getReq);
-                console.log(renderSearch);
+                  }
+                  const renderHTML = async () => {
+                    await $("body").html(`
+                                  <div class="jumbotron text-center">
+                                    <h1>Search Results</h1>
+                                    <h3>Based on your model, these are the best fits for your outfit.</h3> 
+                                  </div>
+                                    
+                                  <div class="container">
+                                    <div class="row">
+                                      <div class="col-sm-3">
+                                        <h3>Top</h3>
+                                        <h5>${renderSearch[0][0].name}</h5>
+                                      </div>
+                                      <div class="col-sm-3">
+                                        <h3>Description</h3>
+                                        <h5>${renderSearch[0][0].description}</h5>
+                                      </div>
+                                      <div class="col-sm-3">
+                                        <h3>Link</h3>        
+                                        <h5>${renderSearch[0][0].link}</h5>
+                                      </div>
+                                      <div class="col-sm-3">      
+                                          <Img src="http://localhost:5001/${renderSearch[0][0].textureImage}" width="300" height="300" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-sm-3">
+                                        <h3>Bottom</h3>
+                                        <h5>${renderSearch[1][0].name}</h5>
+                                      </div>
+                                      <div class="col-sm-3">
+                                        <h3>Description</h3>
+                                        <h5>${renderSearch[1][0].description}</h5>
+                                      </div>
+                                      <div class="col-sm-3">
+                                        <h3>Link</h3>        
+                                        <h5>${renderSearch[1][0].link}</h5>
+                                      </div>
+                                      <div class="col-sm-3">    
+                                          <Img src="http://localhost:5001/${renderSearch[1][0].textureImage}" width="300" height="300" />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                      <div class="col-sm-3">
+                                        <h3>Foot Wear</h3>
+                                        <h5>${renderSearch[2][0].name}</h5>
+                                      </div>
+                                      <div class="col-sm-3">
+                                        <h3>Description</h3>
+                                        <h5>${renderSearch[2][0].description}</h5>
+                                      </div>
+                                      <div class="col-sm-3">
+                                        <h3>Link</h3>        
+                                        <h5>${renderSearch[2][0].link}</h5>
+                                      </div>
+                                      <div class="col-sm-3">   
+                                          <Img src="http://localhost:5001/${renderSearch[2][0].textureImage}" width="300" height="300" />
+                                        </div>
+                                    </div>
+                                  </div>
+
+                                  `);  
+                  }
+                  const startRequest = async () => {
+                    for (let i = 0; i < outfit.length; i++) {
+                      await getReq(outfit[i]);
+                    }
+                    console.log(renderSearch);
+                    await renderHTML();
+                  };
+                  startRequest();
               });
           </script>
           
