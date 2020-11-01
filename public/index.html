@@ -173,6 +173,7 @@
   <!-- partial -->
 
   <script>
+    const url = "https://myntra-seach-server.azurewebsites.net";
     $('#submit-btn').on('click', function (e) {
       e.preventDefault();
       let x = document.querySelector('#clothes-form').elements;
@@ -188,7 +189,7 @@
       async function getReq(item) {
         try {
           const response_raw = await fetch(
-            `http://localhost:5001/textures/${item}`,
+            `${url}/textures/${item}`,
             {
               method: "GET",
               mode: "cors",
@@ -229,7 +230,7 @@
           
           <div class = "row">
             <div class="col-md-4">      
-              <Img src="http://localhost:5001/${renderSearch[0][0].textureImage}" width="300" height="300" />
+              <Img src="${url}/${renderSearch[0][0].textureImage}" width="300" height="300" />
             </div>
             <div class = "col-md-8">
               <h5><a href ="${renderSearch[0][0].link}">${renderSearch[0][0].name}</a></h5>
@@ -247,7 +248,7 @@
           
           <div class = "row">
             <div class="col-md-4">      
-              <Img src="http://localhost:5001/${renderSearch[1][0].textureImage}" width="300" height="300" />
+              <Img src="${url}/${renderSearch[1][0].textureImage}" width="300" height="300" />
             </div>
             <div class = "col-md-8">
               <h5><a href ="${renderSearch[1][0].link}">${renderSearch[1][0].name}</a></h5>
@@ -265,7 +266,7 @@
           
           <div class = "row">
             <div class="col-md-4">      
-              <Img src="http://localhost:5001/${renderSearch[2][0].textureImage}" width="300" height="300" />
+              <Img src="${url}/${renderSearch[2][0].textureImage}" width="300" height="300" />
             </div>
             <div class = "col-md-8">
               <h5><a href ="${renderSearch[2][0].link}">${renderSearch[2][0].name}</a></h5>
