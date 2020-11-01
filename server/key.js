@@ -1,3 +1,3 @@
 module.exports = {
-    MONGOURI: 'mongodb+srv://myntra:myntra@cluster0.87d53.mongodb.net/myntra?retryWrites=true&w=majority'
+    MONGOURI: 'IF_YOU_WANT_TO_RUN_THIS_CODE_PLEASE_MAIL_US_TO_GET_THE_DB_URL'
 }
