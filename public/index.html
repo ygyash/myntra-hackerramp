@@ -218,56 +218,53 @@
                           
                         <div class="container">
                           <div class="row">
-                            <div class="col-sm-3">
-                              <h3>Top</h3>
-                              <h5>${renderSearch[0][0].name}</h5>
-                            </div>
-                            <div class="col-sm-3">
-                              <h3>Description</h3>
-                              <h5>${renderSearch[0][0].description}</h5>
-                            </div>
-                            <div class="col-sm-3">
-                              <h3>Link</h3>        
-                              <h5>${renderSearch[0][0].link}</h5>
-                            </div>
-                            <div class="col-sm-3">      
-                                <Img src="http://localhost:5001/${renderSearch[0][0].textureImage}" width="300" height="300" />
+                            
+                              <div class = "row">
+                                <h3>Top Wear</h3>
+                              </div>
+
+                              <div class = "row">
+                                <div class="col-sm-4">      
+                                  <Img src="http://localhost:5001/${renderSearch[0][0].textureImage}" width="300" height="300" />
+                                </div>
+                                <div class = "col-sm-8">
+                                  <h5><a href ="${renderSearch[0][0].link}"></a>${renderSearch[0][0].name}</h5>
+                                  <p>${renderSearch[0][0].description}</p>
+                                </div>
                               </div>
                           </div>
                           <div class="row">
-                            <div class="col-sm-3">
-                              <h3>Bottom</h3>
-                              <h5>${renderSearch[1][0].name}</h5>
+                            
+                            <div class = "row">
+                              <h3>Bottom Wear</h3>
                             </div>
-                            <div class="col-sm-3">
-                              <h3>Description</h3>
-                              <h5>${renderSearch[1][0].description}</h5>
-                            </div>
-                            <div class="col-sm-3">
-                              <h3>Link</h3>        
-                              <h5>${renderSearch[1][0].link}</h5>
-                            </div>
-                            <div class="col-sm-3">    
+
+                            <div class = "row">
+                              <div class="col-sm-3">      
                                 <Img src="http://localhost:5001/${renderSearch[1][0].textureImage}" width="300" height="300" />
                               </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-sm-3">
+                              <div class = "col-sm-9">
+                                <h5><a href ="${renderSearch[1][0].link}"></a>${renderSearch[1][0].name}</h5>
+                                <p>${renderSearch[1][0].description}</p>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            
+                            <div class = "row">
                               <h3>Foot Wear</h3>
-                              <h5>${renderSearch[2][0].name}</h5>
                             </div>
-                            <div class="col-sm-3">
-                              <h3>Description</h3>
-                              <h5>${renderSearch[2][0].description}</h5>
-                            </div>
-                            <div class="col-sm-3">
-                              <h3>Link</h3>        
-                              <h5>${renderSearch[2][0].link}</h5>
-                            </div>
-                            <div class="col-sm-3">   
+
+                            <div class = "row">
+                              <div class="col-sm-3">      
                                 <Img src="http://localhost:5001/${renderSearch[2][0].textureImage}" width="300" height="300" />
                               </div>
-                          </div>
+                              <div class = "col-sm-9">
+                                <h5><a href ="${renderSearch[2][0].link}"></a>${renderSearch[2][0].name}</h5>
+                                <p>${renderSearch[2][0].description}</p>
+                              </div>
+                            </div>
+                        </div>
                         </div>
 
                         `);
