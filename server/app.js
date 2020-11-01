@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 const { MONGOURI } = require('./key');
 const bodyParser = require("body-parser");
 
@@ -21,6 +22,7 @@ mongoose.connection.on("Error", (err) => {
     console.log(err);
 })
 
+app.use(cors());
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
