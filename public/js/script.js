@@ -191,25 +191,25 @@ $(document).ready(() => {
 
   socket.on("loadClothes", function (model, texture) {
     console.log(model, texture);
-    console.log()
-    if($('#top-select').html().trim()===''){
-        var list = '';
-        for(var i =1;i<=clothes[model].top.length;i++){
-            list = list+`<option value=${i}>${clothes[model].top[i-1]}</option>`;
-        }
-        $('#top-select').html(list);
+    // console.log()
+    if ($('#top-select').html().trim() === '') {
+      var list = '';
+      for (var i = 1; i <= clothes[model].top.length; i++) {
+        list = list + `<option value=${i}>${clothes[model].top[i - 1]}</option>`;
+      }
+      $('#top-select').html(list);
 
-        list = '';
-        for(var i =1;i<=clothes[model].bottom.length;i++){
-            list = list+`<option value=${i}>${clothes[model].bottom[i-1]}</option>`;
-        }
-        $('#bottom-select').html(list);
+      list = '';
+      for (var i = 1; i <= clothes[model].bottom.length; i++) {
+        list = list + `<option value=${i}>${clothes[model].bottom[i - 1]}</option>`;
+      }
+      $('#bottom-select').html(list);
 
-        list = '';
-        for(var i =1;i<=clothes[model].foot.length;i++){
-            list = list+`<option value=${i}>${clothes[model].foot[i-1]}</option>`;
-        }
-        $('#foot-select').html(list);
+      list = '';
+      for (var i = 1; i <= clothes[model].foot.length; i++) {
+        list = list + `<option value=${i}>${clothes[model].foot[i - 1]}</option>`;
+      }
+      $('#foot-select').html(list);
 
     }
 
@@ -217,7 +217,9 @@ $(document).ready(() => {
 
 
     var prev = scene.getObjectByName("clothModel");
-    scene.remove(prev);
+    scene.remove(prev,function(err){
+      console.log(err);
+    });
 
     let stacy_txt = new THREE.TextureLoader().load(
       `model/${model}/tex/${texture}.jpg`
@@ -261,6 +263,8 @@ $(document).ready(() => {
         model.position.y = -11;
         model.name = "clothModel";
 
+        // console.log(model);
+
         scene.add(model);
 
 
@@ -276,6 +280,7 @@ $(document).ready(() => {
           clip = mixer.clipAction(clip);
           return clip;
         });
+        // console.log(possibleAnims);
 
         let idleAnim = THREE.AnimationClip.findByName(fileAnimations, "idle");
 
@@ -398,6 +403,41 @@ $(document).ready(() => {
       renderer.setSize(width, height, false);
     }
     return needResize;
+  }
+
+
+
+
+
+  // window.addEventListener('click', e => raycast(e));
+  // window.addEventListener('touchend', e => raycast(e, true));
+
+  $('#c').on('click', function () {
+    if (!currentlyAnimating) {
+      currentlyAnimating = true;
+      playOnClick();
+    }
+  });
+
+  setInterval(playOnClick,7000);
+
+  // Get a random animation, and play it 
+  function playOnClick() {
+    let anim = Math.floor(Math.random() * possibleAnims.length) + 0;
+    playModifierAnimation(idle, 0.25, possibleAnims[anim], 0.25);
+  }
+
+
+  function playModifierAnimation(from, fSpeed, to, tSpeed) {
+    to.setLoop(THREE.LoopOnce);
+    to.reset();
+    to.play();
+    from.crossFadeTo(to, fSpeed, true);
+    setTimeout(function () {
+      from.enabled = true;
+      to.crossFadeTo(from, tSpeed, true);
+      currentlyAnimating = false;
+    }, to._clip.duration * 1000 - ((tSpeed + fSpeed) * 1000));
   }
 
   // Video Conferencing code.
